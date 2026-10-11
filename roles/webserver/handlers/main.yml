@@ -1,0 +1,7 @@
+---
+- name: Reload Nginx service            # Describes implementation
+  listen: nginx configuration changed   # Describes the reason of implementation
+
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded

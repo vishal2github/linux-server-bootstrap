@@ -1,0 +1,9 @@
+[webservers]
+web-dev-1 ansible_host=192.168.1.10
+
+[databases]
+db-dev-1 ansible_host=192.168.1.20
+
+[dev:children]
+webservers
+databases

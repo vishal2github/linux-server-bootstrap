@@ -1,0 +1,13 @@
+---
+- name: Configure web servers
+  hosts: webservers
+  become: true
+
+  roles:
+    - role: common
+      tags:
+        - common
+
+    - role: webserver
+      tags:
+        - nginx

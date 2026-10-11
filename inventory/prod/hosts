@@ -1,0 +1,10 @@
+[webservers]
+web-prod-1 ansible_host=10.0.0.10
+web-prod-2 ansible_host=10.0.0.11
+
+[databases]
+db-prod-1 ansible_host=10.0.0.20
+
+[prod:children]
+webservers
+databases

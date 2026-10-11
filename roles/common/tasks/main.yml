@@ -1,0 +1,15 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  tags:
+    - common_update
+
+- name: Install common packages
+  ansible.builtin.apt:
+    name: "{{ item }}"  # {{ package_name }} is production simplified direct list way, no need of loop, gives list directly. But for learning purpose of loop it's okay
+    state: present
+  loop: "{{ common_packages }}"
+  tags:
+    - common_install

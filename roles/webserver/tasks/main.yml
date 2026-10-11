@@ -1,0 +1,57 @@
+---
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+  tags:
+    - nginx_install
+
+- name: Deploy Nginx configuration
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    validate: 'nginx -t -c %s'
+  notify:
+    - nginx configuration changed
+  tags:
+    - nginx_configure
+
+# - name: Validate Nginx configuration  # As 'validate' is already embedded with 'Deploy Nginx configuration' task, no need of this task separately
+#   ansible.builtin.command:
+#     cmd: nginx -t
+#   changed_when: false
+#   tags:
+#     - nginx_configure
+
+- name: Enable Nginx service
+  ansible.builtin.service:
+    name: nginx
+    enabled: true
+  tags:
+    - nginx_service
+
+- name: Ensure Nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+  tags:
+    - nginx_service
+
+- name: Execute pending handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Verify Nginx welcome page
+  ansible.builtin.command:
+    cmd: curl http://localhost
+  register: nginx_welcome
+  changed_when: false
+  tags:
+    - nginx_verify
+
+- name: Install Fail2Ban
+  ansible.builtin.apt:
+    name: fail2ban
+    state: present
+  when: install_fail2ban
+  tags:
+    - fail2ban_install
